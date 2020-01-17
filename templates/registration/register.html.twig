@@ -1,0 +1,36 @@
+{% extends 'base.html.twig' %}
+
+{% if app.user %}
+{% set action = 'Modify Account' %}
+{% else %}
+{% set action = 'Register' %}
+{% endif %}
+
+{% block title %}
+{{ action }}
+{% endblock %}
+
+{% block body %}
+    <h1>{{ action }}</h1>
+
+    {{ form_start(registrationForm) }}
+        {{ form_row(registrationForm.email) }}
+        {{ form_row(registrationForm.username) }}
+        {{ form_row(registrationForm.plainPassword) }}
+        {{ form_row(registrationForm.agreeTerms) }}
+
+        <button class="btn btn-primary">{{ action }}</button>
+    {{ form_end(registrationForm) }}
+
+{% if app.user %}
+        <br/><br/>
+        <button class="btn btn-danger" id="opener"> Delete Account </button>
+        <div id="dialog" title="Confirm">Please enter your password to confirm<br/>
+        <form method="post" action="">
+            <input type="password" name="password" placeholder="Password"><br>
+            <input type="submit" value="Confirm" class="btn btn-danger">
+        </form>
+        </div>
+{% endif %}
+
+{% endblock %}

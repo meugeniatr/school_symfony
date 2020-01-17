@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>{% block title %}Welcome!{% endblock %}</title>
+        {% block stylesheets %}
+          {# 'app' must match the first argument to addEntry() in webpack.config.js #}
+          {{ encore_entry_link_tags('app') }}
+
+          <!-- Renders a link tag (if your module requires any CSS) -->
+          <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+          <link rel="icon" href="{{ asset('build/favicon.ico') }}">
+        {% endblock %}
+    </head>
+    <body>
+    {#--------------------------------------------------------UPPER FIXED NAVBAR#}
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <a class="navbar-brand middle" href="#">Movies Rhapsody<i class="material-icons md-48 my-material-icons">movie_filter</i></a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor02" aria-controls="navbarColor02" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarColor02">
+
+  
+  {#------------------------------------------------------------USER LOGGED IN#}
+  <ul class="navbar-nav ml-auto">
+      <li class="nav-item dropdown">
+
+         {% if not app.user %}
+
+        <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">Account</a>
+        <div class="dropdown-menu">
+          <a class="dropdown-item" href="/login">Login</a>
+          <a class="dropdown-item" href="/register">Register</a>
+        </div>
+      {% else %}
+
+        <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">{{ app.user.username }}</a>
+        <div class="dropdown-menu">
+          <a class="dropdown-item" href="/logout">Logout</a>
+        </div>
+              {% endif %}
+      </li>
+  </ul>
+</nav>
+  <div class="d-flex container-fluid" id="wrapper">
+{% block sidebar %}
+    <!-- Sidebar -->
+    <div class="bg-light border-right" id="sidebar-wrapper">
+      <div class="sidebar-heading" style="text-align:center">
+        <img src="{{ asset('build/popcorn.png') }}" style="max-height:50px; max-width:50px" >
+      </div>
+      <div class="list-group list-group-flush">
+        <div style="text-align:center">
+        <a href="/"><i class="material-icons">home</i></a>
+        </div>
+        <div style="text-align:center" class="list-group-item list-group-item-action bg-light">
+        <a href="movie" aria-expanded="false" class="sidebar togglebutton" style="text-align:center; font-size:20px">Movies</a>
+          <ul id="movie" class="list-unstyled" class="submenu" style="display: none; text-align:left">
+            <li>
+            <a href="/discover" class="text-muted">Discover</a>
+            </li>
+            <li>
+            <a href="/search" class="text-muted">Search</a>
+            </li>
+            <li>  
+            </ul>   
+        </div>
+        <div style="text-align:center" class="list-group-item list-group-item-action bg-light">
+          <a href="list" aria-expanded="false" class="sidebar togglebutton" style="text-align:center; font-size:20px">Lists</a>
+          <ul id="list" class="list-unstyled" class="submenu" style="display: none; text-align:left">
+            <li>
+            <a href="/list" class="text-muted" style="text-align:left">All my lists</a>
+            </li>
+            <li>
+            <a href="/list/new" class="text-muted" style="text-align:left">Create a new list</a>
+            </li> 
+            <li>
+            <a href="/list/favorites" class="text-muted" style="text-align:left">Top favorites</a>
+            </li>
+            </ul>           
+        </div>
+        <div style="text-align:center" class="list-group-item list-group-item-action bg-light">
+        {% if app.user and "ROLE_ADMIN" in app.user.getRoles() %}
+            <a href="/admin" style="text-align:center; font-size:20px">Admin</a>
+        {% endif %}
+        </div>
+      </div>
+    </div>
+{% endblock %}
+    <!-- /#sidebar-wrapper -->
+
+    <!-- Page Content -->
+{% block content %}
+{% endblock %}
+      <div class="container-fluid">
+        {% block body %}        
+        {% endblock %}
+      </div>
+    </div>
+    <!-- /#page-content-wrapper -->
+
+  </div>
+  <!-- /#wrapper -->
+
+<!-- Footer -->
+  <!-- Site footer -->
+    {# <footer class="site-footer">
+      <div class="container-fluid" style="background-color:#17bd9b;">
+        <div class="row">
+          <div class="col-sm-12 col-md-6">
+            <h5>About</h5>
+            <p class="text-justify">
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+            </p>
+          </div>
+
+          <div class="col-xs-6 col-md-3">
+          </div>
+
+          <div class="col-xs-6 col-md-3">
+        </div>
+        <hr>
+      </div>
+      <div class="container">
+        <div class="row">
+          <div class="col-md-8 col-sm-6 col-xs-12">
+            <p class="copyright-text">Copyright &copy; 2019 All Rights Reserved by 
+         <a href="/">MoviesRhapsody</a>.
+            </p>
+          </div>
+
+          <div class="col-md-4 col-sm-6 col-xs-12">
+          </div>
+        </div>
+      </div>
+</footer> #}
+<!-- Footer -->
+        {% block javascripts %}
+            <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+            {{ encore_entry_script_tags('app') }}
+<script>
+$(function(){
+    $("a.togglebutton").click(function(event) {
+      $(`#${$(this).attr("href")}`).toggleClass('active').fadeToggle();
+      event.preventDefault();
+    });
+});
+</script>
+        {% endblock %}
+    </body>
+</div>
+</html>

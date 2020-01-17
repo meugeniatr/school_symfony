@@ -1,0 +1,19 @@
+easy_admin:
+    disabled_actions: ['new']
+    entities:
+        User:
+            label: 'user'
+            class: App\Entity\User
+            form:
+                fields:
+                    - { property: "username"}
+                    - { property: "email"}
+                    - { property: "banned"}
+                    - { property: "creation_date"}
+                    - { property: "roles", type: "choice", type_options: { multiple: true, choices: { "ROLE_USER": "ROLE_USER", "ROLE_ADMIN": "ROLE_ADMIN" } } }
+        MovieList:
+            label: 'movieList'
+            class: App\Entity\MovieList
+            form:
+                fields:
+                    - { property: "name"}

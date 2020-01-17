@@ -1,0 +1,36 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}MovieList{% endblock %}
+
+{% block body %}
+<h1> Top movies added in Favorite </h1>
+<div class="container">
+  <div class="row">
+    <div class="col-12">
+		<table class="table table-image">
+		  <thead>
+		    <tr>
+		      <th scope="col"></th>
+		      <th scope="col">Description</th>
+		      <th scope="col" style="text-align:center">Runtime</th>
+		      <th scope="col">Count</th>
+		    </tr>
+		  </thead>
+		  <tbody>
+{% for movie in movies %}
+		    <tr>
+		      <td class="w-25" style="text-align:center">
+              <img src="https://image.tmdb.org/t/p/w300_and_h450_bestv2/{{movie["movie"].poster_path}}" align="center" class="poster" style="max-height:40%; max-width:40%"/>
+		      </td>
+		      <td style="width:40%; text-align:justify">{{ movie["movie"].overview }}</td>
+		      <td style="text-align:center">{{ movie["movie"].runtime }} min </td>
+		      <td>{{ movie["count"] }}</td>
+		    </tr>
+{% endfor %}
+		  </tbody>
+		</table>   
+    </div>
+  </div>
+</div>
+
+{% endblock body %}

@@ -1,0 +1,73 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}MovieList{% endblock %}
+
+{% block body %}
+    <h1>{{ movie_list.name }}</h1>
+
+<div class="container">
+  <div class="row">
+    <div class="col-12">
+		<table class="table table-image">
+		  <thead>
+		    <tr>
+		      <th scope="col"></th>
+		      <th scope="col">Description</th>
+		      <th scope="col" style="text-align:center">Runtime</th>
+		      <th scope="col"></th>
+		    </tr>
+		  </thead>
+		  <tbody>
+{% for movie in movies %}
+		    <tr>
+		      <td class="w-25" style="text-align:center">
+              <img src="https://image.tmdb.org/t/p/w300_and_h450_bestv2/{{movie.poster_path}}" align="center" class="poster" style="max-height:40%; max-width:40%"/>
+		      </td>
+		      <td style="width:40%; text-align:justify">{{ movie.overview }}</td>
+		      <td style="text-align:center">{{ movie.runtime }} min </td>
+		      <td> <button class="btn btn-danger" value="{{ movie.id }}"><i class="material-icons">clear</i></button><br><br>
+              <a class="btn btn-success" href="{{ path('display', { id: movie.id }) }}"><i class="material-icons">zoom_in</i></a>
+              </td>
+		    </tr>
+{% endfor %}
+		  </tbody>
+		</table>   
+    </div>
+  </div>
+</div>
+
+    <div><a class="btn btn-success" href="{{ path('movie_list_index') }}">Back to all lists</a> </div>
+    <br>
+    <div>{{ include('movie_list/_delete_form.html.twig') }}</div>
+
+{% endblock body %}
+
+{% block javascripts %}
+    {{ parent() }}
+
+<script>
+$( document ).ready(function() {
+    $(".btn-danger").click(function () {   
+      button = $(this);
+      $.ajax({
+        url : "{{ path('movie_list_remove', {'id': movie_list.getId() }) }}",
+        type : 'DELETE',
+        data : JSON.stringify({
+            'movieId' : $(this).val()
+        }),
+        dataType:'json',
+        contentType: "application/json;",
+        success : function(data) {  
+            console.log(data);
+            button.closest('tr').remove();    
+        },
+        error : function(request, error)
+        {
+            alert("Request: "+JSON.stringify(request));
+        }
+      });
+    })
+  });
+</script>
+
+{% endblock %}

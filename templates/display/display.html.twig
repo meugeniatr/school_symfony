@@ -1,0 +1,162 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Display movie!{% endblock %}
+{% block body %}
+<div id="addList">
+        <div id="popup">
+        <div id="close">X</div>
+                <p class="font-weight-bold">Add to List</p>
+
+  <ul class="list-group list-group-flush">
+    <li class="list-group-item">
+      <!-- Default checked -->
+      <div class="custom-control custom-checkbox">
+        <input type="checkbox" class="custom-control-input" id="check1" checked>
+        <label class="custom-control-label" for="check1">List 1</label>
+      </div>
+    </li>
+
+    <li class="list-group-item">
+      <!-- Default checked -->
+      <div class="custom-control custom-checkbox">
+        <input type="checkbox" class="custom-control-input" id="check2">
+        <label class="custom-control-label" for="check2">List 2</label>
+      </div>
+    </li>
+    <li class="list-group-item">
+      <!-- Default checked -->
+      <div class="custom-control custom-checkbox">
+        <input type="checkbox" class="custom-control-input" id="check3" checked>
+        <label class="custom-control-label" for="check3">List 3</label>
+      </div>
+    </li>
+    <li class="list-group-item">
+      <!-- Default checked -->
+      <div class="custom-control custom-checkbox">
+        <input type="checkbox" class="custom-control-input" id="check4" checked>
+        <label class="custom-control-label" for="check4">List 4</label>
+      </div>
+    </li>
+    <li class="list-group-item">
+      <!-- Default checked -->
+      <div class="custom-control custom-checkbox">
+        <input type="checkbox" class="custom-control-input" id="check5">
+        <label class="custom-control-label" for="check5">List 5</label>
+      </div>
+    </li>
+        <li class="list-group-item">
+        <input type="submit" class="btn btn-primary" style="width:100px;" value="Add">
+    </li>
+    
+  </ul>
+        </div>
+</div>
+   <h1>{{movieTitle}}</h1>
+        <div class="container">
+        <div class="row filmColumns">
+
+   {% if moviePicture is defined and moviePicture is not null %}
+   <div class="col-sm">
+        <img src="https://image.tmdb.org/t/p/w300_and_h450_bestv2/{{moviePicture}}" align="left" class="poster"/>
+        </div>
+   {% endif %}
+
+
+        <div class="col-sm">
+                <p><strong>Release date</strong><br> {{releaseDate|date("F d, Y")}}</p>
+                <p><strong>Runtime</strong><br> {{ (runtime / 60) |round(0, "floor") }} h {{ (runtime % 60) }} min </p>
+                {% if genres %}
+                         <strong>Genres</strong><br>
+                        {% for genre in genres %}
+                                {{ genre.name }}<br>
+                        {% endfor %}
+                {% endif %}<br>
+                <p><strong>Overview</strong><br> {{overview}}</p>
+                <div class="form-group">
+                  <label for="exampleFormControlSelect1">Select List</label>
+                  <select class="form-control" id="movieListSelect">
+                  {% for list in movieLists %}
+                    {% if not list.getIsFavorite() %}
+                      <option value={{ path('movie_list_add', { id: list.getId() }) }}>{{ list.getName() }}</option>
+                    {% endif %}
+                  {% endfor %}
+                  </select>
+                </div>
+                <p> 
+                  <button type="button" class="btn btn-success btn-lg" id="addToList">Add to List</button>
+                  {% set favorite = "" %}
+                  {% for movie in favoriteList.getMovies() %}
+                    {% if movie == id %}
+                      {% set favorite = "true" %}
+                    {% endif %}
+                  {% endfor %}
+                  {% if favorite == 'true' %}
+                    <button type="button" class="btn btn-success btn-lg" id="addToFavorite" disabled><i class="material-icons">star</i>
+                  {% else %}
+                    <button type="button" class="btn btn-success btn-lg" id="addToFavorite" ><i class="material-icons">star</i>
+                  {% endif %}
+</button>
+                </p>
+        </div>
+
+        <div class="col-sm">   
+                <p><strong>Director</strong><br> {{director}}</p>
+                {% if actors %}
+                        <strong>Cast</strong><br>
+                        {% set actorCount = 0 %}
+                        {% for actor in actors %}
+                                {% if actorCount < 3 %}
+                                        {{ actor.name }}<br/>
+                                        {% set actorCount = actorCount + 1 %}
+                                {% endif %}
+                        {% endfor %}
+                {% endif %}
+        </div>
+        </div>
+        </div>
+{% endblock %}
+
+{% block javascripts %}
+  {{ parent() }}
+  <script>
+  $( document ).ready(function() {
+    $("#addToList").click(function () {
+      $.ajax({
+        url : $( "#movieListSelect" ).val(),
+        type : 'POST',
+        data : JSON.stringify({
+            'movieId' : {{ id }} 
+        }),
+        dataType:'json',
+        contentType: "application/json;",
+        success : function(data) {              
+            alert('Data: '+ data);
+        },
+        error : function(request, error)
+        {
+            alert("Request: "+JSON.stringify(request));
+        }
+      });
+    })
+
+    $("#addToFavorite").click(function () {
+      $.ajax({
+        url : "{{ path('movie_list_add', { id: favoriteList.getId() }) }}",
+        type : 'POST',
+        data : JSON.stringify({
+            'movieId' : {{ id }} 
+        }),
+        dataType:'json',
+        contentType: "application/json",
+        success : function(data) {              
+            $("#addToFavorite").prop( "disabled", true );
+        },
+        error : function(request, error)
+        {
+            alert("Request: "+JSON.stringify(request));
+        }
+      });
+    })
+  });
+  </script>
+{% endblock %}

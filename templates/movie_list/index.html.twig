@@ -1,0 +1,57 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}My Movies List{% endblock %}
+
+{% block body %}
+</ol>
+<div class="jumbotron text-center">
+  <h1>Movies Lists</h1>
+</div>
+    <h1>FFY: Films For You</h1>
+    
+
+<div class="container">
+  <div class="row">
+    <div class="col-12">
+    <table class="table table-hover">
+		  <thead>
+		    <tr>
+		      <th scope="col">Name</th>
+              <th scope="col"></th>
+		      <th scope="col"></th>
+              <th scope="col"></th>
+		      <th scope="col"></th>
+              <th scope="col"></th>
+		      <th scope="col"></th>
+              <th scope="col"></th>
+		      <th scope="col"></th>
+		    </tr>
+		  </thead>
+		  <tbody>
+        {% for movie_list in movie_lists %}
+            <tr>
+                <td>{{ movie_list.name }}</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                 <td> 
+                 <a class="btn btn-success" style="text-align:right" href="{{ path('movie_list_show', {id: movie_list.id }) }}"><i class="material-icons">zoom_in</i></a>
+                 {% if not movie_list.isFavorite() %}
+                  <a class="btn btn-primary" style="text-align:right" href="{{ path('movie_list_edit', {id: movie_list.id }) }}"><i class="material-icons">edit</i></a>
+                 <a class="btn btn-danger" style="text-align:right" href="{{ path('movie_list_delete', {id: movie_list.id }) }}"><i class="material-icons">clear</i></a>
+                 {% endif %}
+
+              </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="4">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    <a class="btn btn-success" href="{{ path('movie_list_new') }}">Create new list</a>
+{% endblock %}

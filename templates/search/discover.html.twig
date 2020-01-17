@@ -1,0 +1,23 @@
+{% extends 'base.html.twig' %}
+{% block title %}
+Search
+{% endblock %}
+
+{% block body %}
+<div class="w-50 mx-auto">
+
+    <h1>Search</h1>
+    {{ form_start(searchForm) }}
+
+    {{ form_label(searchForm.genre, 'Genre') }}
+    {{ form_widget(searchForm.genre) }}
+
+    {{ form_label(searchForm.genre, 'Crew') }}
+    {{ form_widget(searchForm.crew) }}
+
+    {{ form_widget(searchForm.search) }}
+
+    {{ form_end(searchForm, {'render_rest': false}) }}
+</div>
+
+{% endblock %}

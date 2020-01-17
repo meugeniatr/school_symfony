@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %} Film page{% endblock %}
+{% block body %}
+
+ <h1>{{ film.title }}</h1>
+<p>Released on {{ film.release_date }}</p>
+<p>{{ film.overview }}</p>
+<p>Director : {{ cast.director.0.name }}</p>
+{% endblock %}
+

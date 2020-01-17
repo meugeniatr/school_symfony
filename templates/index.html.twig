@@ -1,0 +1,48 @@
+{% extends 'base.html.twig' %}
+
+{% block stylesheets %}
+  {{ parent() }}
+  <link rel="stylesheet" href="{{ asset('css/jquery.flipster.min.css') }}">
+  <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.3/themes/smoothness/jquery-ui.css">
+{% endblock %}
+
+{% block title %}Home{% endblock %}
+{% block body %}
+<h2>Most Popular Movies</h1>
+<div class="my-flipster">
+  <ul>
+    {% for film in mostPopular %}
+            <li><a href="/display/{{ film.id }}"><img src="https://image.tmdb.org/t/p/w200/{{ film.poster_path }}"> </a></li>
+    {% endfor %}
+  </ul>
+</div>
+
+<h2>MOVIES IN THE THEATERS</h2>
+<div class="my-flipster">
+  <ul>
+    {% for film in inTheaters %}
+            <li><a href="/display/{{ film.id }}"><img src="https://image.tmdb.org/t/p/w200/{{ film.poster_path }}"> </a></li>
+    {% endfor %}
+  </ul>
+</div>
+
+<h2>Best Movies of the year</h2>
+<div class="my-flipster">
+  <ul>
+    {% for film in bestOfYear %}
+            <li><a href="/display/{{ film.id }}"><img src="https://image.tmdb.org/t/p/w200/{{ film.poster_path }}"> </a></li>
+    {% endfor %}
+  </ul>
+</div>
+
+
+
+{% endblock %}
+
+{% block javascripts %}
+  {{ parent() }}
+
+  <script src="{{ asset('js/script.js') }}"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.3/jquery-ui.min.js"></script>
+  <script src="{{ asset('js/jquery.flipster.js') }}"></script>
+{% endblock %}

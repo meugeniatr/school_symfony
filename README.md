@@ -24,6 +24,10 @@ Upgrade:
 
 It will ask you to upgrade say `Y`, be sure it works, you might need to use `sudo`
 
+### Mysql
+
+You need to have a MYSQL Database runnning
+
 ### Install node
 
 Go to [NodeJS](https://nodejs.org/) to follow step to install.
@@ -34,6 +38,24 @@ To install local dependencies for the project. They **ARE NOT COMMITED** and **S
 `composer install`
 
 `npm install`
+
+### Build encore assets
+
+In development:
+`npm run watch`
+
+In Production
+`npm run build`
+
+### Environment
+
+Copy .env.example to .env and modify it to have the correct DATABASE_URL
+
+### Create Database
+
+Create db: `php bin/console doctrine:database:create`
+
+Run migration to initiate the Database: `php bin/console doctrine:migrations:migrate`
 
 ## Run the server
 

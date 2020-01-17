@@ -1,0 +1,25 @@
+{% extends 'base.html.twig' %}
+{% block title %}
+Search
+{% endblock %}
+
+{% block body %}
+<div class="w-50 mx-auto">
+
+    <h1>Search</h1>
+    {{ form_start(searchForm,{'action':path('searchResultsRedirection'), 'method':'POST'}) }}
+    {{ form_row(searchForm.title) }}
+  <div class="row">
+  <div class="col">
+     {{ form_label(searchForm.yearStart, 'From') }} {{ form_widget(searchForm.yearStart.year, { 'attr': {'style': 'float:left; display:inline;'}})  }}
+    </div>
+      <div class="col">
+    {{ form_label(searchForm.yearEnd, 'To') }} {{ form_widget(searchForm.yearEnd.year, { 'attr': {'style': 'float:right'} })  }}
+</div>
+</div>  
+    {{ form_widget(searchForm.search) }}
+
+    {{ form_end(searchForm, {'render_rest': false}) }}
+</div>
+
+{% endblock %}

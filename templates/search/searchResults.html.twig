@@ -1,0 +1,60 @@
+{% extends 'base.html.twig' %}
+{% block title %}
+Search Results
+{% endblock %}
+
+{% block body %}
+<div class="w-75 mx-auto">
+{% set results = 0 %}
+{% for film in films %}
+{% if results % 4 == 0 %} <div class="row mx-auto"> {% endif %}
+<div class="col-sm" style="margin-bottom:20px">
+<div class="card" style="width: 14rem;">
+  {% if film.poster_path is defined %} <img class="card-img-top" src="https://image.tmdb.org/t/p/w200/{{ film.poster_path }}" alt=" ">{% endif %}
+  <div class="card-body">
+    <h5 class="card-title">{{ film.title }}</h5>
+    <p class="card-text">{{ film.release_date }} <br> {{ film.overview | slice(0, 100) }}...</p>
+    <a href="/display/{{ film.id }}" class="btn btn-primary">Film Page</a>
+  </div>
+</div>
+</div>
+{% if results % 4 == 3 %} </div> {% endif %}
+{% set results = results + 1 %}
+
+{% endfor %}
+
+
+</div>
+<nav aria-label="...">
+  <ul class="pagination justify-content-center">
+    <li class="page-item {% if curPage == 1 %} disabled {% endif %}">
+      <a class="page-link" href="/search/{{ curPage - 1 }}/{{ title }}/{{ yearStart }}/{{ yearEnd }}" tabindex="-1">Previous</a>
+    </li>
+    {% for i in 1.. totalPage %}
+      <li class="page-item {% if curPage == i %} active {% endif %}"><a class="page-link" href="/search/{{ i }}/{{ title }}/{{ yearStart }}/{{ yearEnd }}">{{ i }}</a></li>
+    {% endfor %}
+    <li class="page-item {% if curPage == totalPage %} disabled {% endif %}">
+      <a class="page-link" href="/search/{{ curPage + 1 }}/{{ title }}/{{ yearStart }}/{{ yearEnd }}">Next</a>
+    </li>
+  </ul>
+</nav>
+</div>
+<div class="w-50 mx-auto">
+
+    <h1>Search</h1>
+    {{ form_start(searchForm,{'action':path('searchResultsRedirection'), 'method':'POST'}) }}
+    {{ form_row(searchForm.title) }}
+  <div class="row">
+  <div class="col">
+     {{ form_label(searchForm.yearStart, 'From') }} {{ form_widget(searchForm.yearStart.year, { 'attr': {'style': 'float:left; display:inline;'}})  }}
+    </div>
+      <div class="col">
+    {{ form_label(searchForm.yearEnd, 'To') }} {{ form_widget(searchForm.yearEnd.year, { 'attr': {'style': 'float:right'} })  }}
+</div>
+</div>
+    {{ form_widget(searchForm.search) }}
+
+    {{ form_end(searchForm, {'render_rest': false}) }}
+</div>
+
+{% endblock %}
